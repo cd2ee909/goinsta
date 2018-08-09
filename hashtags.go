@@ -69,7 +69,7 @@ func (h *Hashtag) Sync() error {
 		var resp struct {
 			Name       string `json:"name"`
 			ID         int64  `json:"id"`
-			MediaCount int64  `json:"media_count"`
+			MediaCount int    `json:"media_count"`
 		}
 		err = json.Unmarshal(body, &resp)
 		if err == nil {
