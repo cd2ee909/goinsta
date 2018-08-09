@@ -28,12 +28,12 @@ type InboxItem struct {
 	Media struct {
 		ID                   string `json:"id"`
 		Images               Images `json:"image_versions2"`
-		OriginalWidth        int    `json:"original_width"`
-		OriginalHeight       int    `json:"original_height"`
-		MediaType            int    `json:"media_type"`
+		OriginalWidth        int64  `json:"original_width"`
+		OriginalHeight       int64  `json:"original_height"`
+		MediaType            int64  `json:"media_type"`
 		MediaID              int64  `json:"media_id"`
-		PlaybackDurationSecs int    `json:"playback_duration_secs"`
-		URLExpireAtSecs      int    `json:"url_expire_at_secs"`
+		PlaybackDurationSecs int64  `json:"playback_duration_secs"`
+		URLExpireAtSecs      int64  `json:"url_expire_at_secs"`
 		OrganicTrackingToken string `json:"organic_tracking_token"`
 	}
 }
@@ -44,24 +44,26 @@ type InboxItem struct {
 // InboxItems are the message of the chat.
 type Inbox struct {
 	inst *Instagram
+	err  error
 
 	Conversations []Conversation `json:"threads"`
 
-	HasNewer            bool  `json:"has_newer"` // TODO
-	HasOlder            bool  `json:"has_older"`
-	UnseenCount         int   `json:"unseen_count"`
-	UnseenCountTs       int64 `json:"unseen_count_ts"`
-	BlendedInboxEnabled bool  `json:"blended_inbox_enabled"`
+	HasNewer            bool   `json:"has_newer"` // TODO
+	HasOlder            bool   `json:"has_older"`
+	Cursor              string `json:"oldest_cursor"`
+	UnseenCount         int64  `json:"unseen_count"`
+	UnseenCountTs       int64  `json:"unseen_count_ts"`
+	BlendedInboxEnabled bool   `json:"blended_inbox_enabled"`
 	// this fields are copied from response
-	SeqID                int   `json:"seq_id"`
-	PendingRequestsTotal int   `json:"pending_requests_total"`
+	SeqID                int64 `json:"seq_id"`
+	PendingRequestsTotal int64 `json:"pending_requests_total"`
 	SnapshotAtMs         int64 `json:"snapshot_at_ms"`
 }
 
 type inboxResp struct {
 	Inbox                Inbox  `json:"inbox"`
-	SeqID                int    `json:"seq_id"`
-	PendingRequestsTotal int    `json:"pending_requests_total"`
+	SeqID                int64  `json:"seq_id"`
+	PendingRequestsTotal int64  `json:"pending_requests_total"`
 	SnapshotAtMs         int64  `json:"snapshot_at_ms"`
 	Status               string `json:"status"`
 }
@@ -74,7 +76,6 @@ func newInbox(inst *Instagram) *Inbox {
 //
 // See example: examples/inbox/sync.go
 func (inbox *Inbox) Sync() error {
-	// TODO: Next for pagination
 	insta := inbox.inst
 	body, err := insta.sendRequest(
 		&reqOptions{
@@ -82,7 +83,6 @@ func (inbox *Inbox) Sync() error {
 			Query: map[string]string{
 				"persistentBadging": "true",
 				"use_unified_inbox": "true",
-				"limit":             "0",
 			},
 		},
 	)
@@ -104,13 +104,90 @@ func (inbox *Inbox) Sync() error {
 	return err
 }
 
+// New initialises a new conversation with a user, for further messages you should use Conversation.Send
+//
+// See example: examples/inbox/newconversation.go
+func (inbox *Inbox) New(user *User, text string) error {
+	insta := inbox.inst
+	to, err := prepareRecipients(user.ID)
+	if err != nil {
+		return err
+	}
+
+	data := insta.prepareDataQuery(
+		map[string]interface{}{
+			"recipient_users": to,
+			"client_context":  generateUUID(),
+			"thread_ids":      `["0"]`,
+			"action":          "send_item",
+			"text":            text,
+		},
+	)
+	_, err = insta.sendRequest(
+		&reqOptions{
+			Connection: "keep-alive",
+			Endpoint:   urlInboxSend,
+			Query:      data,
+			IsPost:     true,
+		},
+	)
+	return err
+}
+
+// Reset sets inbox cursor at the beginning.
+func (inbox *Inbox) Reset() {
+	inbox.Cursor = ""
+}
+
+// Next allows pagination over messages.
+//
+// See example: examples/inbox/next.go
+func (inbox *Inbox) Next() bool {
+	if inbox.err != nil {
+		return false
+	}
+	insta := inbox.inst
+	body, err := insta.sendRequest(
+		&reqOptions{
+			Endpoint: urlInbox,
+			Query: map[string]string{
+				"persistentBadging": "true",
+				"use_unified_inbox": "true",
+				"cursor":            inbox.Cursor,
+			},
+		},
+	)
+	if err == nil {
+		resp := inboxResp{}
+		err = json.Unmarshal(body, &resp)
+		if err == nil {
+			*inbox = resp.Inbox
+			inbox.inst = insta
+			inbox.SeqID = resp.Inbox.SeqID
+			inbox.PendingRequestsTotal = resp.Inbox.PendingRequestsTotal
+			inbox.SnapshotAtMs = resp.Inbox.SnapshotAtMs
+			for i := range inbox.Conversations {
+				inbox.Conversations[i].inst = insta
+				inbox.Conversations[i].firstRun = true
+			}
+			if inbox.Cursor == "" || !inbox.HasOlder {
+				inbox.err = ErrNoMore
+			}
+			return true
+		}
+	}
+	inbox.err = err
+	return false
+}
+
+// Conversation is the representation of an instagram already established conversation through direct messages.
 type Conversation struct {
 	inst     *Instagram
 	err      error
 	firstRun bool
 
 	ID   string `json:"thread_id"`
-	V2ID int64  `json:"thread_v2_id"`
+	V2ID string `json:"thread_v2_id"`
 	// Items can be of many types.
 	Items                     []InboxItem `json:"items"`
 	Title                     string      `json:"thread_title"`
@@ -118,8 +195,8 @@ type Conversation struct {
 	LeftUsers                 []User      `json:"left_users"`
 	Pending                   bool        `json:"pending"`
 	PendingScore              int64       `json:"pending_score"`
-	ReshareReceiveCount       int         `json:"reshare_receive_count"`
-	ReshareSendCount          int         `json:"reshare_send_count"`
+	ReshareReceiveCount       int64       `json:"reshare_receive_count"`
+	ReshareSendCount          int64       `json:"reshare_send_count"`
 	ViewerID                  int64       `json:"viewer_id"`
 	ValuedRequest             bool        `json:"valued_request"`
 	LastActivityAt            int64       `json:"last_activity_at"`
@@ -127,8 +204,8 @@ type Conversation struct {
 	IsPin                     bool        `json:"is_pin"`
 	Named                     bool        `json:"named"`
 	ThreadType                string      `json:"thread_type"`
-	ExpiringMediaSendCount    int         `json:"expiring_media_send_count"`
-	ExpiringMediaReceiveCount int         `json:"expiring_media_receive_count"`
+	ExpiringMediaSendCount    int64       `json:"expiring_media_send_count"`
+	ExpiringMediaReceiveCount int64       `json:"expiring_media_receive_count"`
 	Inviter                   User        `json:"inviter"`
 	HasOlder                  bool        `json:"has_older"`
 	HasNewer                  bool        `json:"has_newer"`
@@ -156,27 +233,74 @@ func (c Conversation) lastItemID() string {
 	return c.Items[n-1].ID
 }
 
+// Like sends heart to the conversation
+//
+// See example: examples/media/likeAll.go
+func (c *Conversation) Like() error {
+	insta := c.inst
+	to, err := prepareRecipients(c)
+	if err != nil {
+		return err
+	}
+
+	thread, err := json.Marshal([]string{c.ID})
+	if err != nil {
+		return err
+	}
+
+	data := insta.prepareDataQuery(
+		map[string]interface{}{
+			"recipient_users": to,
+			"client_context":  generateUUID(),
+			"thread_ids":      b2s(thread),
+			"action":          "send_item",
+		},
+	)
+	_, err = insta.sendRequest(
+		&reqOptions{
+			Connection: "keep-alive",
+			Endpoint:   urlInboxSendLike,
+			Query:      data,
+			IsPost:     true,
+		},
+	)
+	return err
+}
+
 // Send sends message in conversation
+//
+// See example: examples/inbox/sms.go
 func (c *Conversation) Send(text string) error {
 	insta := c.inst
-	data, err := insta.prepareData(
+	// I DON'T KNOW WHY BUT INSTAGRAM WANTS A DOUBLE SLICE OF INTS FOR ONE ID.
+	to, err := prepareRecipients(c)
+	if err != nil {
+		return err
+	}
+
+	// I DONT KNOW WHY BUT INSTAGRAM WANTS SLICE OF STRINGS FOR ONE ID
+	thread, err := json.Marshal([]string{c.ID})
+	if err != nil {
+		return err
+	}
+
+	data := insta.prepareDataQuery(
 		map[string]interface{}{
-			"recipient_users": c.Inviter.ID,
+			"recipient_users": to,
+			"client_context":  generateUUID(),
+			"thread_ids":      b2s(thread),
 			"action":          "send_item",
 			"text":            text,
 		},
 	)
-	body, err := insta.sendRequest(
+	_, err = insta.sendRequest(
 		&reqOptions{
-			Endpoint: urlInboxSend,
-			Query:    generateSignature(data),
-			IsPost:   true,
+			Connection: "keep-alive",
+			Endpoint:   urlInboxSend,
+			Query:      data,
+			IsPost:     true,
 		},
 	)
-	if err == nil {
-		// TODO
-		_ = body
-	}
 	return err
 }
 

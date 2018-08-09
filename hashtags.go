@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// Hashtag is used for getting the media that matches a hashtag on instagram.
 type Hashtag struct {
 	inst *Instagram
 	err  error
@@ -23,20 +24,31 @@ type Hashtag struct {
 		} `json:"layout_content"`
 		FeedType        string `json:"feed_type"`
 		ExploreItemInfo struct {
-			NumColumns      int  `json:"num_columns"`
-			TotalNumColumns int  `json:"total_num_columns"`
-			AspectRatio     int  `json:"aspect_ratio"`
-			Autoplay        bool `json:"autoplay"`
+			NumColumns      int64 `json:"num_columns"`
+			TotalNumColumns int64 `json:"total_num_columns"`
+			AspectRatio     int64 `json:"aspect_ratio"`
+			Autoplay        bool  `json:"autoplay"`
 		} `json:"explore_item_info"`
 	} `json:"sections"`
-	MediaCount          int     `json:"media_count"`
+	MediaCount          int64   `json:"media_count"`
 	ID                  int64   `json:"id"`
 	MoreAvailable       bool    `json:"more_available"`
 	NextID              string  `json:"next_max_id"`
-	NextPage            int     `json:"next_page"`
+	NextPage            int64   `json:"next_page"`
 	NextMediaIds        []int64 `json:"next_media_ids"`
 	AutoLoadMoreEnabled bool    `json:"auto_load_more_enabled"`
 	Status              string  `json:"status"`
+}
+
+func (h *Hashtag) setValues() {
+	for i := range h.Sections {
+		for j := range h.Sections[i].LayoutContent.Medias {
+			m := &FeedMedia{
+				inst: h.inst,
+			}
+			setToItem(&h.Sections[i].LayoutContent.Medias[j].Item, m)
+		}
+	}
 }
 
 // NewHashtag returns initialised hashtag structure
@@ -57,13 +69,14 @@ func (h *Hashtag) Sync() error {
 		var resp struct {
 			Name       string `json:"name"`
 			ID         int64  `json:"id"`
-			MediaCount int    `json:"media_count"`
+			MediaCount int64  `json:"media_count"`
 		}
 		err = json.Unmarshal(body, &resp)
 		if err == nil {
 			h.Name = resp.Name
 			h.ID = resp.ID
 			h.MediaCount = resp.MediaCount
+			h.setValues()
 		}
 	}
 	return err
@@ -97,6 +110,7 @@ func (h *Hashtag) Next() bool {
 			if !h.MoreAvailable {
 				h.err = ErrNoMore
 			}
+			h.setValues()
 			return true
 		}
 	}
