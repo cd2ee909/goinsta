@@ -23,9 +23,9 @@ type School struct {
 
 // PicURLInfo repre
 type PicURLInfo struct {
-	Height int64  `json:"height"`
+	Height int    `json:"height"`
 	URL    string `json:"url"`
-	Width  int64  `json:"width"`
+	Width  int    `json:"width"`
 }
 
 // ErrorN is general instagram error
@@ -91,7 +91,7 @@ type Location struct {
 
 // SuggestedUsers stores the information about user suggestions.
 type SuggestedUsers struct {
-	Type        int64 `json:"type"`
+	Type        int `json:"type"`
 	Suggestions []struct {
 		User            User          `json:"user"`
 		Algorithm       string        `json:"algorithm"`
@@ -133,7 +133,7 @@ type SavedMedia struct {
 	Items []struct {
 		Media Item `json:"media"`
 	} `json:"items"`
-	NumResults          int64  `json:"num_results"`
+	NumResults          int    `json:"num_results"`
 	MoreAvailable       bool   `json:"more_available"`
 	AutoLoadMoreEnabled bool   `json:"auto_load_more_enabled"`
 	Status              string `json:"status"`
@@ -179,12 +179,12 @@ type Caption struct {
 	ID              int64  `json:"pk"`
 	UserID          int64  `json:"user_id"`
 	Text            string `json:"text"`
-	Type            int64  `json:"type"`
+	Type            int    `json:"type"`
 	CreatedAt       int64  `json:"created_at"`
 	CreatedAtUtc    int64  `json:"created_at_utc"`
 	ContentType     string `json:"content_type"`
 	Status          string `json:"status"`
-	BitFlags        int64  `json:"bit_flags"`
+	BitFlags        int    `json:"bit_flags"`
 	User            User   `json:"user"`
 	DidReportAsSpam bool   `json:"did_report_as_spam"`
 	MediaID         int64  `json:"media_id"`
@@ -199,13 +199,13 @@ type Mentions struct {
 	Width    float64 `json:"width"`
 	Height   float64 `json:"height"`
 	Rotation float64 `json:"rotation"`
-	IsPinned int64   `json:"is_pinned"`
+	IsPinned int     `json:"is_pinned"`
 	User     User    `json:"user"`
 }
 
 // Video are different quality videos
 type Video struct {
-	Type   int64  `json:"type"`
+	Type   int    `json:"type"`
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
 	URL    string `json:"url"`
@@ -230,7 +230,7 @@ type Tray struct {
 	} `json:"post_live"`
 	StoryRankingToken    string      `json:"story_ranking_token"`
 	Broadcasts           []Broadcast `json:"broadcasts"`
-	FaceFilterNuxVersion int64       `json:"face_filter_nux_version"`
+	FaceFilterNuxVersion int         `json:"face_filter_nux_version"`
 	HasNewNuxStory       bool        `json:"has_new_nux_story"`
 	Status               string      `json:"status"`
 }
@@ -273,7 +273,7 @@ type Broadcast struct {
 	ExpireAt             int64  `json:"expire_at"`
 	EncodingTag          string `json:"encoding_tag"`
 	InternalOnly         bool   `json:"internal_only"`
-	NumberOfQualities    int64  `json:"number_of_qualities"`
+	NumberOfQualities    int    `json:"number_of_qualities"`
 	CoverFrameURL        string `json:"cover_frame_url"`
 	BroadcastOwner       User   `json:"broadcast_owner"`
 	PublishedTime        int64  `json:"published_time"`
@@ -300,7 +300,7 @@ func (b *BlockedUser) Unblock() error {
 
 type blockedListResp struct {
 	BlockedList []BlockedUser `json:"blocked_list"`
-	PageSize    int64         `json:"page_size"`
+	PageSize    int           `json:"page_size"`
 	Status      string        `json:"status"`
 }
 
@@ -308,7 +308,7 @@ type blockedListResp struct {
 type InboxItemMedia struct {
 	ClientContext              string `json:"client_context"`
 	ExpiringMediaActionSummary struct {
-		Count     int64  `json:"count"`
+		Count     int    `json:"count"`
 		Timestamp int64  `json:"timestamp"`
 		Type      string `json:"type"`
 	} `json:"expiring_media_action_summary"`
@@ -317,7 +317,7 @@ type InboxItemMedia struct {
 	RavenMedia struct {
 		MediaType int64 `json:"media_type"`
 	} `json:"raven_media"`
-	ReplyChainCount int64         `json:"reply_chain_count"`
+	ReplyChainCount int           `json:"reply_chain_count"`
 	SeenUserIds     []interface{} `json:"seen_user_ids"`
 	Timestamp       int64         `json:"timestamp"`
 	UserID          int64         `json:"user_id"`

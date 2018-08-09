@@ -20,15 +20,15 @@ type FollowingActivity struct {
 	AutoLoadMoreEnabled bool  `json:"auto_load_more_enabled"`
 	NextID              int64 `json:"next_max_id"`
 	Stories             []struct {
-		Type      int64 `json:"type"`
-		StoryType int64 `json:"story_type"`
+		Type      int `json:"type"`
+		StoryType int `json:"story_type"`
 		Args      struct {
 			MediaDestination string `json:"media_destination"`
 			Destination      string `json:"destination"`
 			Text             string `json:"text"`
 			Links            []struct {
-				Start int64  `json:"start"`
-				End   int64  `json:"end"`
+				Start int    `json:"start"`
+				End   int    `json:"end"`
 				Type  string `json:"type"`
 				ID    string `json:"id"`
 			} `json:"links"`
@@ -113,18 +113,18 @@ type MineActivity struct {
 		MoreAvailable bool `json:"more_available"`
 	} `json:"aymf"`
 	Counts struct {
-		PhotosOfYou int64 `json:"photos_of_you"`
-		Requests    int64 `json:"requests"`
+		PhotosOfYou int `json:"photos_of_you"`
+		Requests    int `json:"requests"`
 	} `json:"counts"`
 	FriendRequestStories []interface{} `json:"friend_request_stories"`
 	Stories              []struct {
-		Type      int64 `json:"type"`
-		StoryType int64 `json:"story_type"`
+		Type      int `json:"type"`
+		StoryType int `json:"story_type"`
 		Args      struct {
 			Text  string `json:"text"`
 			Links []struct {
-				Start int64  `json:"start"`
-				End   int64  `json:"end"`
+				Start int    `json:"start"`
+				End   int    `json:"end"`
 				Type  string `json:"type"`
 				ID    string `json:"id"`
 			} `json:"links"`

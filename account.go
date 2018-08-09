@@ -24,7 +24,7 @@ type Account struct {
 	Email                      string       `json:"email"`
 	PhoneNumber                string       `json:"phone_number"`
 	IsBusiness                 bool         `json:"is_business"`
-	Gender                     int64        `json:"gender"`
+	Gender                     int          `json:"gender"`
 	ProfilePicID               string       `json:"profile_pic_id"`
 	CanSeeOrganicInsights      bool         `json:"can_see_organic_insights"`
 	ShowInsightsTerms          bool         `json:"show_insights_terms"`
@@ -34,16 +34,16 @@ type Account struct {
 	IsUnpublished              bool         `json:"is_unpublished"`
 	AllowedCommenterType       string       `json:"allowed_commenter_type"`
 	IsVerified                 bool         `json:"is_verified"`
-	MediaCount                 int64        `json:"media_count"`
-	FollowerCount              int64        `json:"follower_count"`
-	FollowingCount             int64        `json:"following_count"`
-	GeoMediaCount              int64        `json:"geo_media_count"`
+	MediaCount                 int          `json:"media_count"`
+	FollowerCount              int          `json:"follower_count"`
+	FollowingCount             int          `json:"following_count"`
+	GeoMediaCount              int          `json:"geo_media_count"`
 	ExternalURL                string       `json:"external_url"`
 	HasBiographyTranslation    bool         `json:"has_biography_translation"`
 	ExternalLynxURL            string       `json:"external_lynx_url"`
 	HdProfilePicURLInfo        PicURLInfo   `json:"hd_profile_pic_url_info"`
 	HdProfilePicVersions       []PicURLInfo `json:"hd_profile_pic_versions"`
-	UsertagsCount              int64        `json:"usertags_count"`
+	UsertagsCount              int          `json:"usertags_count"`
 	HasChaining                bool         `json:"has_chaining"`
 	ReelAutoArchive            string       `json:"reel_auto_archive"`
 	PublicEmail                string       `json:"public_email"`

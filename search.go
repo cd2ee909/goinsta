@@ -26,7 +26,7 @@ type SearchResult struct {
 	Tags []struct {
 		ID               int64       `json:"id"`
 		Name             string      `json:"name"`
-		MediaCount       int64       `json:"media_count"`
+		MediaCount       int         `json:"media_count"`
 		FollowStatus     interface{} `json:"follow_status"`
 		Following        interface{} `json:"following"`
 		AllowFollowing   interface{} `json:"allow_following"`
@@ -52,11 +52,11 @@ type SearchResult struct {
 	// Facebook also uses `Users`
 	Places   []interface{} `json:"places"`
 	Hashtags []struct {
-		Position int64 `json:"position"`
+		Position int `json:"position"`
 		Hashtag  struct {
 			Name       string `json:"name"`
 			ID         int64  `json:"id"`
-			MediaCount int64  `json:"media_count"`
+			MediaCount int    `json:"media_count"`
 		} `json:"hashtag"`
 	} `json:"hashtags"`
 	ClearClientCache bool `json:"clear_client_cache"`
