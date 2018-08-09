@@ -20,28 +20,28 @@ type FollowingActivity struct {
 	AutoLoadMoreEnabled bool  `json:"auto_load_more_enabled"`
 	NextID              int64 `json:"next_max_id"`
 	Stories             []struct {
-		Type      int `json:"type"`
-		StoryType int `json:"story_type"`
+		Type      int64 `json:"type"`
+		StoryType int64 `json:"story_type"`
 		Args      struct {
 			MediaDestination string `json:"media_destination"`
 			Destination      string `json:"destination"`
 			Text             string `json:"text"`
 			Links            []struct {
-				Start int    `json:"start"`
-				End   int    `json:"end"`
+				Start int64  `json:"start"`
+				End   int64  `json:"end"`
 				Type  string `json:"type"`
 				ID    string `json:"id"`
 			} `json:"links"`
-			ProfileID               int    `json:"profile_id"`
+			ProfileID               int64  `json:"profile_id"`
 			ProfileImage            string `json:"profile_image"`
-			SecondProfileID         int    `json:"second_profile_id"`
+			SecondProfileID         int64  `json:"second_profile_id"`
 			SecondProfileImage      string `json:"second_profile_image"`
 			ProfileImageDestination string `json:"profile_image_destination"`
 			Media                   []struct {
 				ID    string `json:"id"`
 				Image string `json:"image"`
 			} `json:"media"`
-			Timestamp int    `json:"timestamp"`
+			Timestamp int64  `json:"timestamp"`
 			Tuuid     string `json:"tuuid"`
 		} `json:"args"`
 		Counts struct {
@@ -113,18 +113,18 @@ type MineActivity struct {
 		MoreAvailable bool `json:"more_available"`
 	} `json:"aymf"`
 	Counts struct {
-		PhotosOfYou int `json:"photos_of_you"`
-		Requests    int `json:"requests"`
+		PhotosOfYou int64 `json:"photos_of_you"`
+		Requests    int64 `json:"requests"`
 	} `json:"counts"`
 	FriendRequestStories []interface{} `json:"friend_request_stories"`
 	Stories              []struct {
-		Type      int `json:"type"`
-		StoryType int `json:"story_type"`
+		Type      int64 `json:"type"`
+		StoryType int64 `json:"story_type"`
 		Args      struct {
 			Text  string `json:"text"`
 			Links []struct {
-				Start int    `json:"start"`
-				End   int    `json:"end"`
+				Start int64  `json:"start"`
+				End   int64  `json:"end"`
 				Type  string `json:"type"`
 				ID    string `json:"id"`
 			} `json:"links"`
@@ -134,19 +134,19 @@ type MineActivity struct {
 				OutgoingRequest bool `json:"outgoing_request"`
 			} `json:"inline_follow"`
 			Actions         []string `json:"actions"`
-			ProfileID       int      `json:"profile_id"`
+			ProfileID       int64    `json:"profile_id"`
 			ProfileImage    string   `json:"profile_image"`
 			Timestamp       float64  `json:"timestamp"`
 			Tuuid           string   `json:"tuuid"`
 			Clicked         bool     `json:"clicked"`
 			ProfileName     string   `json:"profile_name"`
-			LatestReelMedia int      `json:"latest_reel_media"`
+			LatestReelMedia int64    `json:"latest_reel_media"`
 		} `json:"args"`
 		Counts struct {
 		} `json:"counts"`
 		Pk string `json:"pk"`
 	} `json:"old_stories"`
-	ContinuationToken int         `json:"continuation_token"`
+	ContinuationToken int64       `json:"continuation_token"`
 	Subscription      interface{} `json:"subscription"`
 	NextID            int64       `json:"next_max_id"`
 	Status            string      `json:"status"`

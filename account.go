@@ -24,7 +24,7 @@ type Account struct {
 	Email                      string       `json:"email"`
 	PhoneNumber                string       `json:"phone_number"`
 	IsBusiness                 bool         `json:"is_business"`
-	Gender                     int          `json:"gender"`
+	Gender                     int64        `json:"gender"`
 	ProfilePicID               string       `json:"profile_pic_id"`
 	CanSeeOrganicInsights      bool         `json:"can_see_organic_insights"`
 	ShowInsightsTerms          bool         `json:"show_insights_terms"`
@@ -34,16 +34,16 @@ type Account struct {
 	IsUnpublished              bool         `json:"is_unpublished"`
 	AllowedCommenterType       string       `json:"allowed_commenter_type"`
 	IsVerified                 bool         `json:"is_verified"`
-	MediaCount                 int          `json:"media_count"`
-	FollowerCount              int          `json:"follower_count"`
-	FollowingCount             int          `json:"following_count"`
-	GeoMediaCount              int          `json:"geo_media_count"`
+	MediaCount                 int64        `json:"media_count"`
+	FollowerCount              int64        `json:"follower_count"`
+	FollowingCount             int64        `json:"following_count"`
+	GeoMediaCount              int64        `json:"geo_media_count"`
 	ExternalURL                string       `json:"external_url"`
 	HasBiographyTranslation    bool         `json:"has_biography_translation"`
 	ExternalLynxURL            string       `json:"external_lynx_url"`
 	HdProfilePicURLInfo        PicURLInfo   `json:"hd_profile_pic_url_info"`
 	HdProfilePicVersions       []PicURLInfo `json:"hd_profile_pic_versions"`
-	UsertagsCount              int          `json:"usertags_count"`
+	UsertagsCount              int64        `json:"usertags_count"`
 	HasChaining                bool         `json:"has_chaining"`
 	ReelAutoArchive            string       `json:"reel_auto_archive"`
 	PublicEmail                string       `json:"public_email"`
@@ -54,7 +54,7 @@ type Account struct {
 	SocialContext              string       `json:"social_context,omitempty"`
 	SearchSocialContext        string       `json:"search_social_context,omitempty"`
 	MutualFollowersCount       float64      `json:"mutual_followers_count"`
-	LatestReelMedia            int          `json:"latest_reel_media,omitempty"`
+	LatestReelMedia            int64        `json:"latest_reel_media,omitempty"`
 	CityID                     int64        `json:"city_id"`
 	CityName                   string       `json:"city_name"`
 	AddressStreet              string       `json:"address_street"`

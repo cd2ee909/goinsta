@@ -17,7 +17,7 @@ type SearchResult struct {
 	HasMore    bool   `json:"has_more"`
 	RankToken  string `json:"rank_token"`
 	Status     string `json:"status"`
-	NumResults int    `json:"num_results"`
+	NumResults int64  `json:"num_results"`
 
 	// User search results
 	Users []User `json:"users"`
@@ -26,7 +26,7 @@ type SearchResult struct {
 	Tags []struct {
 		ID               int64       `json:"id"`
 		Name             string      `json:"name"`
-		MediaCount       int         `json:"media_count"`
+		MediaCount       int64       `json:"media_count"`
 		FollowStatus     interface{} `json:"follow_status"`
 		Following        interface{} `json:"following"`
 		AllowFollowing   interface{} `json:"allow_following"`
@@ -52,11 +52,11 @@ type SearchResult struct {
 	// Facebook also uses `Users`
 	Places   []interface{} `json:"places"`
 	Hashtags []struct {
-		Position int `json:"position"`
+		Position int64 `json:"position"`
 		Hashtag  struct {
 			Name       string `json:"name"`
 			ID         int64  `json:"id"`
-			MediaCount int    `json:"media_count"`
+			MediaCount int64  `json:"media_count"`
 		} `json:"hashtag"`
 	} `json:"hashtags"`
 	ClearClientCache bool `json:"clear_client_cache"`
@@ -197,7 +197,7 @@ func (search *Search) FeedTags(tag string) (*FeedTag, error) {
 type FeedTag struct {
 	RankedItems         []Item     `json:"ranked_items"`
 	Images              []Item     `json:"items"`
-	NumResults          int        `json:"num_results"`
+	NumResults          int64      `json:"num_results"`
 	NextID              string     `json:"next_max_id"`
 	MoreAvailable       bool       `json:"more_available"`
 	AutoLoadMoreEnabled bool       `json:"auto_load_more_enabled"`

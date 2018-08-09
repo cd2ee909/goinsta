@@ -29,10 +29,10 @@ type Item struct {
 	ID               string  `json:"id"`
 	CommentsDisabled bool    `json:"comments_disabled"`
 	DeviceTimestamp  int64   `json:"device_timestamp"`
-	MediaType        int     `json:"media_type"`
+	MediaType        int64   `json:"media_type"`
 	Code             string  `json:"code"`
 	ClientCacheKey   string  `json:"client_cache_key"`
-	FilterType       int     `json:"filter_type"`
+	FilterType       int64   `json:"filter_type"`
 	CarouselParentID string  `json:"carousel_parent_id"`
 	CarouselMedia    []Item  `json:"carousel_media,omitempty"`
 	User             User    `json:"user"`
@@ -48,11 +48,11 @@ type Item struct {
 	CommentLikesEnabled          bool        `json:"comment_likes_enabled"`
 	CommentThreadingEnabled      bool        `json:"comment_threading_enabled"`
 	HasMoreComments              bool        `json:"has_more_comments"`
-	MaxNumVisiblePreviewComments int         `json:"max_num_visible_preview_comments"`
+	MaxNumVisiblePreviewComments int64       `json:"max_num_visible_preview_comments"`
 	// Previewcomments can be `string` or `[]string` or `[]Comment`.
 	// Use PreviewComments function instead of getting it directly.
 	Previewcomments interface{} `json:"preview_comments,omitempty"`
-	CommentCount    int         `json:"comment_count"`
+	CommentCount    int64       `json:"comment_count"`
 	PhotoOfYou      bool        `json:"photo_of_you"`
 	// Tags are tagged people in photo
 	Tags struct {
@@ -66,7 +66,7 @@ type Item struct {
 	Images          Images   `json:"image_versions2,omitempty"`
 	OriginalWidth   int      `json:"original_width,omitempty"`
 	OriginalHeight  int      `json:"original_height,omitempty"`
-	ImportedTakenAt int      `json:"imported_taken_at,omitempty"`
+	ImportedTakenAt int64    `json:"imported_taken_at,omitempty"`
 	Location        Location `json:"location,omitempty"`
 	Lat             float64  `json:"lat,omitempty"`
 	Lng             float64  `json:"lng,omitempty"`
@@ -76,9 +76,9 @@ type Item struct {
 	HasAudio          bool    `json:"has_audio,omitempty"`
 	VideoDuration     float64 `json:"video_duration,omitempty"`
 	ViewCount         float64 `json:"view_count,omitempty"`
-	IsDashEligible    int     `json:"is_dash_eligible,omitempty"`
+	IsDashEligible    int64   `json:"is_dash_eligible,omitempty"`
 	VideoDashManifest string  `json:"video_dash_manifest,omitempty"`
-	NumberOfQualities int     `json:"number_of_qualities,omitempty"`
+	NumberOfQualities int64   `json:"number_of_qualities,omitempty"`
 
 	// Only for stories
 	StoryEvents              []interface{} `json:"story_events"`
@@ -93,7 +93,7 @@ type Item struct {
 	StoryProductItems        []interface{} `json:"story_product_items"`
 	SupportsReelReactions    bool          `json:"supports_reel_reactions"`
 	ShowOneTapFbShareTooltip bool          `json:"show_one_tap_fb_share_tooltip"`
-	HasSharedToFb            int           `json:"has_shared_to_fb"`
+	HasSharedToFb            int64         `json:"has_shared_to_fb"`
 	Mentions                 []Mentions
 }
 
@@ -453,7 +453,7 @@ type StoryMedia struct {
 	err error
 
 	Pk              interface{} `json:"id"`
-	LatestReelMedia int         `json:"latest_reel_media"`
+	LatestReelMedia int64       `json:"latest_reel_media"`
 	ExpiringAt      float64     `json:"expiring_at"`
 	HaveBeenSeen    float64     `json:"seen"`
 	CanReply        bool        `json:"can_reply"`
@@ -463,12 +463,12 @@ type StoryMedia struct {
 	User            User        `json:"user"`
 	Items           []Item      `json:"items"`
 	ReelMentions    []string    `json:"reel_mentions"`
-	PrefetchCount   int         `json:"prefetch_count"`
-	// this field can be int or bool
+	PrefetchCount   int64       `json:"prefetch_count"`
+	// this field can be int64 or bool
 	HasBestiesMedia      interface{} `json:"has_besties_media"`
 	StoryRankingToken    string      `json:"story_ranking_token"`
 	Broadcasts           []Broadcast `json:"broadcasts"`
-	FaceFilterNuxVersion int         `json:"face_filter_nux_version"`
+	FaceFilterNuxVersion int64       `json:"face_filter_nux_version"`
 	HasNewNuxStory       bool        `json:"has_new_nux_story"`
 	Status               string      `json:"status"`
 }
@@ -654,7 +654,7 @@ type FeedMedia struct {
 	timestamp string
 
 	Items               []Item `json:"items"`
-	NumResults          int    `json:"num_results"`
+	NumResults          int64  `json:"num_results"`
 	MoreAvailable       bool   `json:"more_available"`
 	AutoLoadMoreEnabled bool   `json:"auto_load_more_enabled"`
 	Status              string `json:"status"`

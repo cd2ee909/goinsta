@@ -28,12 +28,12 @@ type InboxItem struct {
 	Media struct {
 		ID                   string `json:"id"`
 		Images               Images `json:"image_versions2"`
-		OriginalWidth        int    `json:"original_width"`
-		OriginalHeight       int    `json:"original_height"`
-		MediaType            int    `json:"media_type"`
+		OriginalWidth        int64  `json:"original_width"`
+		OriginalHeight       int64  `json:"original_height"`
+		MediaType            int64  `json:"media_type"`
 		MediaID              int64  `json:"media_id"`
-		PlaybackDurationSecs int    `json:"playback_duration_secs"`
-		URLExpireAtSecs      int    `json:"url_expire_at_secs"`
+		PlaybackDurationSecs int64  `json:"playback_duration_secs"`
+		URLExpireAtSecs      int64  `json:"url_expire_at_secs"`
 		OrganicTrackingToken string `json:"organic_tracking_token"`
 	}
 }
@@ -51,19 +51,19 @@ type Inbox struct {
 	HasNewer            bool   `json:"has_newer"` // TODO
 	HasOlder            bool   `json:"has_older"`
 	Cursor              string `json:"oldest_cursor"`
-	UnseenCount         int    `json:"unseen_count"`
+	UnseenCount         int64  `json:"unseen_count"`
 	UnseenCountTs       int64  `json:"unseen_count_ts"`
 	BlendedInboxEnabled bool   `json:"blended_inbox_enabled"`
 	// this fields are copied from response
-	SeqID                int   `json:"seq_id"`
-	PendingRequestsTotal int   `json:"pending_requests_total"`
+	SeqID                int64 `json:"seq_id"`
+	PendingRequestsTotal int64 `json:"pending_requests_total"`
 	SnapshotAtMs         int64 `json:"snapshot_at_ms"`
 }
 
 type inboxResp struct {
 	Inbox                Inbox  `json:"inbox"`
-	SeqID                int    `json:"seq_id"`
-	PendingRequestsTotal int    `json:"pending_requests_total"`
+	SeqID                int64  `json:"seq_id"`
+	PendingRequestsTotal int64  `json:"pending_requests_total"`
 	SnapshotAtMs         int64  `json:"snapshot_at_ms"`
 	Status               string `json:"status"`
 }
@@ -195,8 +195,8 @@ type Conversation struct {
 	LeftUsers                 []User      `json:"left_users"`
 	Pending                   bool        `json:"pending"`
 	PendingScore              int64       `json:"pending_score"`
-	ReshareReceiveCount       int         `json:"reshare_receive_count"`
-	ReshareSendCount          int         `json:"reshare_send_count"`
+	ReshareReceiveCount       int64       `json:"reshare_receive_count"`
+	ReshareSendCount          int64       `json:"reshare_send_count"`
 	ViewerID                  int64       `json:"viewer_id"`
 	ValuedRequest             bool        `json:"valued_request"`
 	LastActivityAt            int64       `json:"last_activity_at"`
@@ -204,8 +204,8 @@ type Conversation struct {
 	IsPin                     bool        `json:"is_pin"`
 	Named                     bool        `json:"named"`
 	ThreadType                string      `json:"thread_type"`
-	ExpiringMediaSendCount    int         `json:"expiring_media_send_count"`
-	ExpiringMediaReceiveCount int         `json:"expiring_media_receive_count"`
+	ExpiringMediaSendCount    int64       `json:"expiring_media_send_count"`
+	ExpiringMediaReceiveCount int64       `json:"expiring_media_receive_count"`
 	Inviter                   User        `json:"inviter"`
 	HasOlder                  bool        `json:"has_older"`
 	HasNewer                  bool        `json:"has_newer"`
