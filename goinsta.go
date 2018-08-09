@@ -169,6 +169,7 @@ func Export(inst *Instagram, writer io.Writer) error {
 	if err != nil {
 		return err
 	}
+
 	config := ConfigFile{
 		ID:        inst.Account.ID,
 		User:      inst.user,
